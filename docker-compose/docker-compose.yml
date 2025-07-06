@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    restart: always
+    container_name: cst-hmo-postgres
+    environment:
+      POSTGRES_DB: hmo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: december25
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - cst-hmo-net
+
+  backend:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: cst-hmo-backend
+    ports:
+      - "7070:7070"
+    depends_on:
+      - postgres
+    restart: on-failure
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hmo
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: december25
+    networks:
+      - cst-hmo-net
+
+volumes:
+  postgres_data:
+
+networks:
+  cst-hmo-net:

@@ -1,0 +1,145 @@
+# ==================== BASE CONFIG (shared across all profiles) ====================
+server:
+  port: 7070
+  servlet:
+    context-path:
+
+spring:
+  application:
+    name: cst-hmo-backend
+  web:
+    resources:
+      add-mappings: false
+  cloud:
+    config:
+      enabled: false
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
+
+# ==================== LOCAL DEVELOPMENT PROFILE ====================
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hmo
+    username: postgres
+    password: december25
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: Local-HikariPool
+      maximum-pool-size: 5
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc.time_zone: UTC
+    hibernate:
+      ddl-auto: update
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
+
+# ==================== DOCKER PRODUCTION PROFILE ====================
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://cst-hmo-postgres:5432/hmo}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:december25}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: Docker-HikariPool
+      maximum-pool-size: 10
+      connection-timeout: 30000
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc.time_zone: UTC
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# ==================== IN-MEMORY H2 PROFILE ====================
+---
+spring:
+  config:
+    activate:
+      on-profile: h2
+
+  datasource:
+    url: jdbc:h2:mem:hmodb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      pool-name: H2-HikariPool
+      maximum-pool-size: 5
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc.time_zone: UTC
+    hibernate:
+      ddl-auto: create-drop
+
+  flyway:
+    enabled: false  # Flyway is for PostgreSQL; skip it here
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
