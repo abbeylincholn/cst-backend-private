@@ -1,0 +1,2 @@
+ALTER TABLE departments
+    ADD COLUMN IF NOT EXISTS created_by VARCHAR(255);

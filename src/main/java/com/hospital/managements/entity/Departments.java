@@ -3,7 +3,6 @@ package com.hospital.managements.entity;
 import com.hospital.managements.enums.DepartmentsStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -14,12 +13,11 @@ import java.util.UUID;
 public class Departments extends BaseEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "department_id", columnDefinition = "UUID")
-    private UUID departmentId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // now uses SERIAL/auto-increment
 
-    @Column(unique = true)
-    private String code;
+    @Column(name = "department_id", unique = true)
+    private String departmentId; // DEPT001-style code
 
     private String name;
 

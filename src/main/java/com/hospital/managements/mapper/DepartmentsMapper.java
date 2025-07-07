@@ -19,7 +19,7 @@ public class DepartmentsMapper {
     }
     // Entity → DepartmentsResponseDto
     public static DepartmentsResponseDto mapToResponseDto(Departments department, DepartmentsResponseDto departmentsResponseDto) {
-        departmentsResponseDto.setCode(department.getCode());
+        departmentsResponseDto.setCode(department.getDepartmentId());
         departmentsResponseDto.setName(department.getName());
         departmentsResponseDto.setLocation(department.getLocation());
         departmentsResponseDto.setContactNumber(department.getContactNumber());
@@ -30,7 +30,7 @@ public class DepartmentsMapper {
 
     // Entity → DepartmentsUpdateDto
     public static DepartmentsUpdateDto mapToUpdateDto(Departments department, DepartmentsUpdateDto departmentsUpdateDto) {
-        departmentsUpdateDto.setCode(department.getCode());
+        departmentsUpdateDto.setCode(department.getDepartmentId());
         departmentsUpdateDto.setName(department.getName());
         departmentsUpdateDto.setLocation(department.getLocation());
         departmentsUpdateDto.setContactNumber(department.getContactNumber());

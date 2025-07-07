@@ -6,13 +6,11 @@ import com.hospital.managements.dto.departmentDto.DepartmentsUpdateDto;
 import com.hospital.managements.entity.Departments;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DepartmentsMapperTest {
 
-    private static final UUID DEPARTMENT_ID = UUID.fromString("00000000-0000-0000-0000-000000000001");
+    private static final String DEPARTMENT_ID = "DEPT001";
 
     @Test
     void testMapToEntity_FromRequestDto() {

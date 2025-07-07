@@ -26,7 +26,6 @@ spring:
   config:
     activate:
       on-profile: local
-
   datasource:
     url: jdbc:postgresql://localhost:5432/hmo
     username: postgres
@@ -35,7 +34,6 @@ spring:
     hikari:
       pool-name: Local-HikariPool
       maximum-pool-size: 5
-
   jpa:
     show-sql: true
     open-in-view: false
@@ -44,13 +42,12 @@ spring:
         format_sql: true
         jdbc.time_zone: UTC
     hibernate:
-      ddl-auto: update
-
+      ddl-auto: validate  # Updated to validate to avoid conflicts with Flyway
   flyway:
-    enabled: true
+    enabled: false
     baseline-on-migrate: true
     locations: classpath:db/migration
-
+    ignore-unsupported-db: true  # Added to bypass PostgreSQL 16.9 check
 logging:
   level:
     root: INFO
@@ -63,9 +60,8 @@ spring:
   config:
     activate:
       on-profile: docker
-
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://cst-hmo-postgres:5432/hmo}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres:5432/hmo}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:december25}
     driver-class-name: org.postgresql.Driver
@@ -73,7 +69,6 @@ spring:
       pool-name: Docker-HikariPool
       maximum-pool-size: 10
       connection-timeout: 30000
-
   jpa:
     show-sql: true
     open-in-view: false
@@ -82,13 +77,12 @@ spring:
         format_sql: true
         jdbc.time_zone: UTC
     hibernate:
-      ddl-auto: validate
-
+      ddl-auto: update
+      default_schema: public
   flyway:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
-
 logging:
   level:
     root: INFO
@@ -103,43 +97,3 @@ management:
     web:
       exposure:
         include: health,info
-
-# ==================== IN-MEMORY H2 PROFILE ====================
----
-spring:
-  config:
-    activate:
-      on-profile: h2
-
-  datasource:
-    url: jdbc:h2:mem:hmodb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-    hikari:
-      pool-name: H2-HikariPool
-      maximum-pool-size: 5
-
-  jpa:
-    show-sql: true
-    open-in-view: false
-    properties:
-      hibernate:
-        format_sql: true
-        jdbc.time_zone: UTC
-    hibernate:
-      ddl-auto: create-drop
-
-  flyway:
-    enabled: false  # Flyway is for PostgreSQL; skip it here
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
-logging:
-  level:
-    root: INFO
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type: TRACE

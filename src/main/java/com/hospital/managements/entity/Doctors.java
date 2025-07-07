@@ -8,8 +8,10 @@ import lombok.*;
 @Entity
 public class Doctors extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "doctor_id")
-    private Long doctorId;
+    private Long id;
+
+    @Column(name = "doctor_id", unique = true)
+    private String doctorId;  // DOC001-style code
 
     @Column(name = "first_name")
     private String firstName;
@@ -17,7 +19,7 @@ public class Doctors extends BaseEntity {
     @Column(name = "last_name")
     private String lastName;
 
-    private String specialization;
+    private String specialty;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -30,9 +32,8 @@ public class Doctors extends BaseEntity {
     private DoctorsAvailability availability;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", referencedColumnName = "id") // links to Departments.id
     private Departments department;
-
 
 
 

@@ -12,7 +12,7 @@ public class DoctorsMapper {
     public static Doctors mapToEntity(DoctorsCreateDto doctorsCreateDto, Doctors doctors, Departments department) {
         doctors.setFirstName(doctorsCreateDto.getFirstName());
         doctors.setLastName(doctorsCreateDto.getLastName());
-        doctors.setSpecialization(doctorsCreateDto.getSpecialization());
+        doctors.setSpecialty(doctorsCreateDto.getSpecialization());
         doctors.setPhoneNumber(doctorsCreateDto.getPhoneNumber());
         doctors.setEmail(doctorsCreateDto.getEmail());
         doctors.setDepartment(department);
@@ -23,7 +23,7 @@ public class DoctorsMapper {
         public static Doctors mapToEntity(DoctorsUpdateDto doctorsUpdateDto, Doctors doctors, Departments department) {
             doctors.setFirstName(doctorsUpdateDto.getFirstName());
             doctors.setLastName(doctorsUpdateDto.getLastName());
-            doctors.setSpecialization(doctorsUpdateDto.getSpecialization());
+            doctors.setSpecialty(doctorsUpdateDto.getSpecialization());
             doctors.setPhoneNumber(doctorsUpdateDto.getPhoneNumber());
             doctors.setEmail(doctorsUpdateDto.getEmail());
             doctors.setDepartment(department); // set the Departments object
@@ -31,10 +31,10 @@ public class DoctorsMapper {
         }
     // Entity → DoctorsResponseDto
     public static DoctorsResponseDto mapToResponseDto(Doctors doctors, DoctorsResponseDto doctorsResponseDto, Departments department) {
-        doctorsResponseDto.setDoctorId(doctors.getDoctorId());
+        doctorsResponseDto.setDoctorId(doctors.getId());
         doctorsResponseDto.setFirstName(doctors.getFirstName());
         doctorsResponseDto.setLastName(doctors.getLastName());
-        doctorsResponseDto.setSpecialization(doctors.getSpecialization());
+        doctorsResponseDto.setSpecialization(doctors.getSpecialty());
         doctorsResponseDto.setPhoneNumber(doctors.getPhoneNumber());
         doctorsResponseDto.setEmail(doctors.getEmail());
         doctors.setDepartment(department);

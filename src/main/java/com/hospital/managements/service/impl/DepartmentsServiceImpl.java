@@ -16,24 +16,20 @@ public class DepartmentsServiceImpl implements IDepartmentsService{
 
     private final DepartmentsRepository departmentsRepository;
 
-    private String generateDepartmentCode() {
-        long count = departmentsRepository.count() + 1;
-        String newCode = String.format("DEPT-%03d", count);
-        while (departmentsRepository.findByCode(newCode).isPresent()) {
-            count++;
-            newCode = String.format("DEPT-%03d", count);
-        }
-        return newCode;
+    private String formatDepartmentId(Long id) {
+        return String.format("DEPT-%03d", id);
     }
 
     @Override
     public  void createDepartment(DepartmentsRequestDto departmentsRequestDto) {
-        Departments department = DepartmentsMapper.mapToDepartments(departmentsRequestDto, new Departments());
-        if (departmentsRepository.findByName(department.getName()).isPresent()) {
-            throw new DepartmentAlreadyExistsException("Department with name " + department.getName() + " already exists.");
+
+        if (departmentsRepository.findByName(departmentsRequestDto.getName()).isPresent()) {
+            throw new DepartmentAlreadyExistsException("Department with name " + departmentsRequestDto.getName() + " already exists.");
         }
-        department.setCode(generateDepartmentCode());
-        departmentsRepository.save(department);
+        Departments department = DepartmentsMapper.mapToDepartments(departmentsRequestDto, new Departments());
+        Departments saved = departmentsRepository.save(department);
+        saved.setDepartmentId(formatDepartmentId(saved.getId()));
+        departmentsRepository.save(saved);
     }
 
     /**
